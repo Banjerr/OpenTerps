@@ -477,6 +477,13 @@ contents: >-
               wrapped: true
             items:
               $ref: "#/components/schemas/Strain"
+          effects:
+            type: array
+            xml:
+              name: effect
+              wrapped: true
+            items:
+              $ref: "#/components/schemas/Effect"
         xml:
           name: Terpene
       ApiResponse:
@@ -491,6 +498,6 @@ contents: >-
             type: string
 created: 1603052058352
 fileName: OpenTerps 0.0.1
-modified: 1603065279642
+modified: 1603115305903
 parentId: wrk_212b84192cbf45aca779664c81b27fd7
 type: ApiSpec
