@@ -1,0 +1,496 @@
+_id: spc_0903acfbadb04e8fb6d8402c0dc35b84
+contentType: yaml
+contents: >-
+  openapi: 3.0.0
+
+  info:
+    description: "An Open API that contains information about terpenes, the effects, and the cannabis varieties that contain them."
+    version: 0.0.1
+    title: OpenTerps
+    termsOfService: https://wayhigh.we.bs
+    contact:
+      email: benjamminredden@gmail.com
+    license:
+      name: Apache 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.html
+  tags:
+    - name: cannabis
+      description: The plant.
+    - name: terpene
+      description: One of the most important parts of the cannabis plant.
+    - name: effects
+      description: The effect of said terpenes.
+  paths:
+    /terpene:
+      post:
+        tags:
+          - terpene
+        summary: Add a new terpene to the api
+        description: "Add new terpene to the api"
+        operationId: addTerpene
+        requestBody:
+          $ref: "#/components/requestBodies/Terpene"
+        responses:
+          "405":
+            description: Invalid input
+      put:
+        tags:
+          - terpene
+        summary: Update an existing terpene
+        description: "Update terpene in the api"
+        operationId: updateTerpene
+        requestBody:
+          $ref: "#/components/requestBodies/Terpene"
+        responses:
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Terpene not found
+          "405":
+            description: Validation exception
+    /terpene/findByEffect:
+      get:
+        tags:
+          - terpene
+        summary: Finds Terpenes by effect
+        description: Multiple status values can be provided with comma separated strings
+        operationId: findTerpenesByEffect
+        parameters:
+          - name: effect
+            in: query
+            description: Effect values that need to be considered for filter
+            required: true
+            explode: true
+            schema:
+              type: array
+              items:
+                type: string
+        responses:
+          "200":
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Terpene"
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Terpene"
+          "400":
+            description: Invalid effect value
+    /terpene/{terpeneId}:
+      get:
+        tags:
+          - terpene
+        summary: Find terpene by ID
+        description: Returns a single terpene
+        operationId: getTerpeneById
+        parameters:
+          - name: terpeneId
+            in: path
+            description: ID of terpene to return
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "200":
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  $ref: "#/components/schemas/Terpene"
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Terpene"
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Terpene not found
+      post:
+        tags:
+          - terpene
+        summary: Updates a terpene in the api
+        description: "Update a single terpene in the API"
+        operationId: updateTerpeneByID
+        parameters:
+          - name: terpeneId
+            in: path
+            description: ID of terpene that needs to be updated
+            required: true
+            schema:
+              type: integer
+              format: int64
+        requestBody:
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  effects:
+                    description: Updated effects of the pet
+                    type: string
+        responses:
+          "405":
+            description: Invalid input
+      delete:
+        tags:
+          - terpene
+        summary: Deletes a terpene
+        description: "Deletes a terpene from the API"
+        operationId: deleteTerpene
+        parameters:
+          - name: api_key
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: terpeneId
+            in: path
+            description: Terpene id to delete
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Terpene not found
+    /user:
+      post:
+        tags:
+          - user
+        summary: Create user
+        description: This can only be done by the logged in user.
+        operationId: createUser
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: Created user object
+          required: true
+        responses:
+          default:
+            description: successful operation
+    /user/createWithArray:
+      post:
+        tags:
+          - user
+        summary: Creates list of users with given input array
+        description: ""
+        operationId: createUsersWithArrayInput
+        requestBody:
+          $ref: "#/components/requestBodies/UserArray"
+        responses:
+          default:
+            description: successful operation
+    /user/createWithList:
+      post:
+        tags:
+          - user
+        summary: Creates list of users with given input array
+        description: ""
+        operationId: createUsersWithListInput
+        requestBody:
+          $ref: "#/components/requestBodies/UserArray"
+        responses:
+          default:
+            description: successful operation
+    /user/login:
+      get:
+        tags:
+          - user
+        summary: Logs user into the system
+        description: ""
+        operationId: loginUser
+        parameters:
+          - name: username
+            in: query
+            description: The user name for login
+            required: true
+            schema:
+              type: string
+          - name: password
+            in: query
+            description: The password for login in clear text
+            required: true
+            schema:
+              type: string
+        responses:
+          "200":
+            description: successful operation
+            headers:
+              X-Rate-Limit:
+                description: calls per hour allowed by the user
+                schema:
+                  type: integer
+                  format: int32
+              X-Expires-After:
+                description: date in UTC when token expires
+                schema:
+                  type: string
+                  format: date-time
+            content:
+              application/xml:
+                schema:
+                  type: string
+              application/json:
+                schema:
+                  type: string
+          "400":
+            description: Invalid username/password supplied
+    /user/logout:
+      get:
+        tags:
+          - user
+        summary: Logs out current logged in user session
+        description: ""
+        operationId: logoutUser
+        responses:
+          default:
+            description: successful operation
+    /user/{username}:
+      get:
+        tags:
+          - user
+        summary: Get user by user name
+        description: ""
+        operationId: getUserByName
+        parameters:
+          - name: username
+            in: path
+            description: "The name that needs to be fetched. Use user1 for testing. "
+            required: true
+            schema:
+              type: string
+        responses:
+          "200":
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  $ref: "#/components/schemas/User"
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/User"
+          "400":
+            description: Invalid username supplied
+          "404":
+            description: User not found
+      put:
+        tags:
+          - user
+        summary: Updated user
+        description: This can only be done by the logged in user.
+        operationId: updateUser
+        parameters:
+          - name: username
+            in: path
+            description: name that need to be updated
+            required: true
+            schema:
+              type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: Updated user object
+          required: true
+        responses:
+          "400":
+            description: Invalid user supplied
+          "404":
+            description: User not found
+      delete:
+        tags:
+          - user
+        summary: Delete user
+        description: This can only be done by the logged in user.
+        operationId: deleteUser
+        parameters:
+          - name: username
+            in: path
+            description: The name that needs to be deleted
+            required: true
+            schema:
+              type: string
+        responses:
+          "400":
+            description: Invalid username supplied
+          "404":
+            description: User not found
+  externalDocs:
+    description: Find out more about OpenTerps
+    url: https://wayhigh.we.bs
+  servers:
+    - url: https://virtserver.swaggerhub.com/CountryFriedCoders/OpenTerps/0.0.1
+  components:
+    requestBodies:
+      UserArray:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+        description: List of user object
+        required: true
+      Terpene:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Terpene"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Terpene"
+        description: Terpene object
+        required: true
+    schemas:
+      User:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          username:
+            type: string
+          firstName:
+            type: string
+          lastName:
+            type: string
+          email:
+            type: string
+          password:
+            type: string
+          phone:
+            type: string
+          userStatus:
+            type: integer
+            format: int32
+            description: User Status
+        xml:
+          name: User
+      Category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Category
+      Tag:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Tag
+      Effect:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Effect
+      Strain:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Strain
+      Taste:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Taste
+      Smell:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+        xml:
+          name: Smell
+      Terpene:
+        type: object
+        required:
+          - name
+        properties:
+          id:
+            type: integer
+            format: int64
+          category:
+            $ref: "#/components/schemas/Category"
+          name:
+            type: string
+            example: myrcene
+          tags:
+            type: array
+            xml:
+              name: tag
+              wrapped: true
+            items:
+              $ref: "#/components/schemas/Tag"
+          tastes:
+            type: array
+            xml:
+              name: taste
+              wrapped: true
+            items:
+              $ref: "#/components/schemas/Taste"
+          smells:
+            type: array
+            xml:
+              name: smell
+              wrapped: true
+            items:
+              $ref: "#/components/schemas/Smell"
+          strains:
+            type: array
+            xml:
+              name: strain
+              wrapped: true
+            items:
+              $ref: "#/components/schemas/Strain"
+        xml:
+          name: Terpene
+      ApiResponse:
+        type: object
+        properties:
+          code:
+            type: integer
+            format: int32
+          type:
+            type: string
+          message:
+            type: string
+created: 1603052058352
+fileName: OpenTerps 0.0.1
+modified: 1603065279642
+parentId: wrk_212b84192cbf45aca779664c81b27fd7
+type: ApiSpec
