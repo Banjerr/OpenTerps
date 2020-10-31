@@ -1,5 +1,9 @@
 _id: spc_0903acfbadb04e8fb6d8402c0dc35b84
-contentType: yaml
+type: ApiSpec
+parentId: wrk_212b84192cbf45aca779664c81b27fd7
+modified: 1604154333301
+created: 1603052058352
+fileName: OpenTerps 0.0.1
 contents: >-
   openapi: 3.0.0
 
@@ -133,6 +137,120 @@ contents: >-
                   effects:
                     description: Updated effects of the pet
                     type: string
+        responses:
+          "405":
+            description: Invalid input
+      delete:
+        tags:
+          - terpene
+        summary: Deletes a terpene
+        description: "Deletes a terpene from the API"
+        operationId: deleteTerpene
+        parameters:
+          - name: api_key
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: terpeneId
+            in: path
+            description: Terpene id to delete
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Terpene not found
+    /effect:
+      post:
+        tags:
+          - effect
+        summary: Add a new effect to the api
+        description: "Add new effect to the api"
+        operationId: addEffect
+        requestBody:
+          $ref: "#/components/requestBodies/Effect"
+        responses:
+          "405":
+            description: Invalid input
+      put:
+        tags:
+          - effect
+        summary: Update an existing effect
+        description: "Update effect in the api"
+        operationId: updateEffect
+        requestBody:
+          $ref: "#/components/requestBodies/Effect"
+        responses:
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Effect not found
+          "405":
+            description: Validation exception
+    /effect/{effectId}:
+      get:
+        tags:
+          - effect
+        summary: Find effect by ID
+        description: Returns a single effect
+        operationId: getEffectById
+        parameters:
+          - name: effectId
+            in: path
+            description: ID of effect to return
+            required: true
+            schema:
+              type: integer
+              format: int64
+        responses:
+          "200":
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  $ref: "#/components/schemas/Effect"
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Effect"
+          "400":
+            description: Invalid ID supplied
+          "404":
+            description: Terpene not found
+      post:
+        tags:
+          - effect
+        summary: Updates a effect in the api
+        description: "Update a single effect in the API"
+        operationId: updateEffectByID
+        parameters:
+          - name: effectId
+            in: path
+            description: ID of effect that needs to be updated
+            required: true
+            schema:
+              type: integer
+              format: int64
+  #       requestBody:
+
+  #         content:
+
+  #           application/x-www-form-urlencoded:
+
+  #             schema:
+
+  #               type: object
+
+  #               properties:
+
+  #                 effects:
+
+  #                   description: Updated effects of the pet
+
+  #                   type: string
         responses:
           "405":
             description: Invalid input
@@ -325,120 +443,6 @@ contents: >-
             description: Invalid username supplied
           "404":
             description: User not found
-    /effect:
-      post:
-        tags:
-          - effect
-        summary: Add a new effect to the api
-        description: "Add new effect to the api"
-        operationId: addEffect
-        requestBody:
-          $ref: "#/components/requestBodies/Effect"
-        responses:
-          "405":
-            description: Invalid input
-      put:
-        tags:
-          - effect
-        summary: Update an existing effect
-        description: "Update effect in the api"
-        operationId: updateEffect
-        requestBody:
-          $ref: "#/components/requestBodies/Effect"
-        responses:
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Effect not found
-          "405":
-            description: Validation exception
-    /effect/{effectId}:
-      get:
-        tags:
-          - effect
-        summary: Find effect by ID
-        description: Returns a single effect
-        operationId: getEffectById
-        parameters:
-          - name: effectId
-            in: path
-            description: ID of effect to return
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          "200":
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: "#/components/schemas/Effect"
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Effect"
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Terpene not found
-      post:
-        tags:
-          - effect
-        summary: Updates a effect in the api
-        description: "Update a single effect in the API"
-        operationId: updateEffectByID
-        parameters:
-          - name: effectId
-            in: path
-            description: ID of effect that needs to be updated
-            required: true
-            schema:
-              type: integer
-              format: int64
-  #       requestBody:
-
-  #         content:
-
-  #           application/x-www-form-urlencoded:
-
-  #             schema:
-
-  #               type: object
-
-  #               properties:
-
-  #                 effects:
-
-  #                   description: Updated effects of the pet
-
-  #                   type: string
-        responses:
-          "405":
-            description: Invalid input
-      delete:
-        tags:
-          - terpene
-        summary: Deletes a terpene
-        description: "Deletes a terpene from the API"
-        operationId: deleteTerpene
-        parameters:
-          - name: api_key
-            in: header
-            required: true
-            schema:
-              type: string
-          - name: terpeneId
-            in: path
-            description: Terpene id to delete
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          "400":
-            description: Invalid ID supplied
-          "404":
-            description: Terpene not found
   externalDocs:
     description: Find out more about OpenTerps
     url: https://wayhigh.we.bs
@@ -666,8 +670,4 @@ contents: >-
             type: string
           message:
             type: string
-created: 1603052058352
-fileName: OpenTerps 0.0.1
-modified: 1603155484449
-parentId: wrk_212b84192cbf45aca779664c81b27fd7
-type: ApiSpec
+contentType: yaml
