@@ -1,7 +1,7 @@
 _id: spc_0903acfbadb04e8fb6d8402c0dc35b84
 type: ApiSpec
 parentId: wrk_212b84192cbf45aca779664c81b27fd7
-modified: 1604537705118
+modified: 1604538307543
 created: 1603052058352
 fileName: OpenTerps 0.0.1
 contents: >-
@@ -24,6 +24,8 @@ contents: >-
       description: One of the most important parts of the cannabis plant.
     - name: effect
       description: The effect of said terpenes.
+    - name: user
+      description: The people who love the plant and contribute to this API.
   paths:
     /terpene:
       post:
