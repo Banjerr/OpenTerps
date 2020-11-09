@@ -34,7 +34,5 @@ func main() {
 	// POST /migrations
 	r.POST("/migrations", migrations.RunMigration)
 
-	r.Run()
-
-	http.ListenAndServe(":"+os.Getenv("PORT"), nil) // this is for heroku
+	r.Run(":" + os.Getenv("PORT"))
 }
