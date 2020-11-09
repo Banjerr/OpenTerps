@@ -1,1 +1,1 @@
-web: openterps
+web: bin/openterps
