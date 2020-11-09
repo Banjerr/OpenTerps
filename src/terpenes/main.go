@@ -1,4 +1,4 @@
-package controllers
+package terpenes
 
 import (
 	"net/http"

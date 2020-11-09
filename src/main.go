@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"openterps/controllers"
 	"openterps/dbconnector"
+	"openterps/migrations"
+	"openterps/terpenes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -27,8 +28,11 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"data": "Welcome to OpenTerps 0.0.1!"})
 	})
 
-	// GET / Terpenes
-	r.GET("/terpenes", controllers.GetTerpenes)
+	// GET /terpenes
+	r.GET("/terpenes", terpenes.GetTerpenes)
+
+	// POST /migrations
+	r.POST("/migrations", migrations.RunMigration)
 
 	r.Run()
 }
