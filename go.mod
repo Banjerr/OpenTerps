@@ -11,4 +11,4 @@ require (
 	gorm.io/gorm v1.20.6
 )
 
-// +heroku install github.com/gin-gonic/gin, github.com/gin-gonic/gin, github.com/jinzhu/gorm, github.com/joho/godotenv, gorm.io/driver/postgres, gorm.io/gorm
+// +heroku install github.com/gin-gonic/gin github.com/gin-gonic/gin github.com/jinzhu/gorm github.com/joho/godotenv gorm.io/driver/postgres gorm.io/gorm
