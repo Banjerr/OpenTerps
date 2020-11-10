@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
 
@@ -10,14 +9,13 @@ import (
 	"openterps/terpenes"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Print("Error loading .env file. Hopefully this isn't local")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Print("Error loading .env file. Hopefully this isn't local")
+	// }
 
 	r := gin.Default()
 
