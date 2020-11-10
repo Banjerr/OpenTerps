@@ -31,6 +31,9 @@ func main() {
 	// GET /terpenes
 	r.GET("/terpenes", terpenes.GetTerpenes)
 
+	// POST /terpenes
+	r.POST("/terpenes", terpenes.CreateTerpene)
+
 	// POST /migrations
 	r.POST("/migrations", migrations.RunMigration)
 
