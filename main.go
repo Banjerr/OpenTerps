@@ -34,6 +34,9 @@ func main() {
 	// POST /terpenes
 	r.POST("/terpenes", terpenes.CreateTerpene)
 
+	// PUT /terpenes
+	r.PATCH("/terpenes/:id", terpenes.UpdateTerpene)
+
 	// POST /migrations
 	r.POST("/migrations", migrations.RunMigration)
 

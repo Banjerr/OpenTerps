@@ -1,6 +1,7 @@
 package terpenes
 
 import (
+	"log"
 	"net/http"
 
 	"openterps/dbconnector"
@@ -18,7 +19,7 @@ func GetTerpenes(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": terpenes})
 }
 
-type postTerpeneInput struct {
+type terpeneInput struct {
 	Name     string            `json:"name" binding:"required"`
 	Category []models.Category `json:"category"`
 	Taste    []models.Taste    `json:"taste"`
@@ -31,12 +32,12 @@ type postTerpeneInput struct {
 // Create a terpene
 func CreateTerpene(c *gin.Context) {
 	// Validate input
-	var input postTerpeneInput
+	var input terpeneInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	log.Println("input is ", input)
 	// Create terpene
 	terpene := models.Terpene{
 		Name:     input.Name,
@@ -47,6 +48,27 @@ func CreateTerpene(c *gin.Context) {
 		Effects:  input.Effect,
 	}
 	dbconnector.DB.Create(&terpene)
+
+	c.JSON(http.StatusOK, gin.H{"data": terpene})
+}
+
+// PATCH /terpenes/:id
+// Update a terpene
+func UpdateTerpene(c *gin.Context) {
+	var terpene models.Terpene
+	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&terpene).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Terp not found!"})
+		return
+	}
+
+	// Validate input
+	var input terpeneInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	dbconnector.DB.Model(&terpene).Updates(input)
 
 	c.JSON(http.StatusOK, gin.H{"data": terpene})
 }
