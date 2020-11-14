@@ -57,9 +57,6 @@ func main() {
 	// Delete /effects
 	r.DELETE("/effects/:id", effects.DeleteEffect)
 
-	// POST /migrations
-	r.POST("/migrations", migrations.RunMigration)
-
 	// GET /tastes
 	r.GET("/tastes", tastes.GetTastes)
 
