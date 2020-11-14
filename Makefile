@@ -11,3 +11,7 @@ clean:
 
 heroku: $(DOCKER_CMD)
 	heroku container:push web
+
+build:
+	export GO111MODULE=on
+	env GOOS=linux GOARCH=amd64 go build -o bin/openterps -v .
