@@ -1,7 +1,6 @@
 package terpenes
 
 import (
-	"log"
 	"net/http"
 
 	"openterps/dbconnector"
@@ -14,7 +13,7 @@ import (
 // Get all terpenes
 func GetTerpenes(c *gin.Context) {
 	var terpenes []models.Terpene
-	dbconnector.DB.Find(&terpenes)
+	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Categories").Preload("Strains").Preload("Effects").Find(&terpenes)
 
 	c.JSON(http.StatusOK, gin.H{"data": terpenes})
 }
@@ -37,15 +36,15 @@ func CreateTerpene(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Println("input is ", input)
+
 	// Create terpene
 	terpene := models.Terpene{
-		Name:     input.Name,
-		Category: input.Category,
-		Tastes:   input.Taste,
-		Smells:   input.Smell,
-		Strains:  input.Strain,
-		Effects:  input.Effect,
+		Name:       input.Name,
+		Categories: input.Category,
+		Tastes:     input.Taste,
+		Smells:     input.Smell,
+		Strains:    input.Strain,
+		Effects:    input.Effect,
 	}
 	dbconnector.DB.Create(&terpene)
 
@@ -71,4 +70,18 @@ func UpdateTerpene(c *gin.Context) {
 	dbconnector.DB.Model(&terpene).Updates(input)
 
 	c.JSON(http.StatusOK, gin.H{"data": terpene})
+}
+
+// DELETE /terpenes/:id
+// Delete a terpene
+func DeleteTerpene(c *gin.Context) {
+	var terpene models.Terpene
+	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&terpene).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Terpene not found!"})
+		return
+	}
+
+	dbconnector.DB.Delete(&terpene)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
