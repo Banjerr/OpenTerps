@@ -1,12 +1,14 @@
 package terpenes
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"openterps/dbconnector"
 	"openterps/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // GET /terpenes
@@ -15,7 +17,11 @@ func GetTerpenes(c *gin.Context) {
 	var terpenes []models.Terpene
 	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Categories").Preload("Strains").Preload("Effects").Find(&terpenes)
 
-	c.JSON(http.StatusOK, gin.H{"data": terpenes})
+	var terpeneResponse []models.TerpeneResponse
+	terpeneJSON, _ := json.Marshal(terpenes)
+	_ = json.Unmarshal(terpeneJSON, &terpeneResponse)
+
+	c.JSON(http.StatusOK, gin.H{"data": terpeneResponse})
 }
 
 type terpeneInput struct {
@@ -67,9 +73,15 @@ func UpdateTerpene(c *gin.Context) {
 		return
 	}
 
-	dbconnector.DB.Model(&terpene).Updates(input)
+	terpene.Categories = append(terpene.Categories, input.Category...)
+	terpene.Smells = append(terpene.Smells, input.Smell...)
+	terpene.Tastes = append(terpene.Tastes, input.Taste...)
+	terpene.Effects = append(terpene.Effects, input.Effect...)
+	terpene.Strains = append(terpene.Strains, input.Strain...)
 
-	c.JSON(http.StatusOK, gin.H{"data": terpene})
+	dbconnector.DB.Session(&gorm.Session{FullSaveAssociations: true}).Save(&terpene)
+
+	c.JSON(http.StatusOK, gin.H{"data": &terpene})
 }
 
 // DELETE /terpenes/:id
