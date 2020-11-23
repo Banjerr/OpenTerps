@@ -2,7 +2,7 @@
 
 An open source API to categorize cannabis and it's terpenes/effects/tastes/smells.
 
-[docs](https://app.swaggerhub.com/apis-docs/CountryFriedCoders/OpenTerps/0.0.2)
+[docs](https://app.swaggerhub.com/apis-docs/CountryFriedCoders/OpenTerps)
 
 ```
                  |
