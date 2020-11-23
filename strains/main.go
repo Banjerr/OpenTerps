@@ -5,6 +5,7 @@ import (
 
 	"openterps/dbconnector"
 	"openterps/models"
+	"openterps/simpleauth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,53 +26,65 @@ type strainsInput struct {
 // POST /strains
 // Create a strains
 func CreateStrains(c *gin.Context) {
-	// Validate input
-	var input strainsInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
 
-	// Create strains
-	strains := models.Strain{
-		Name: input.Name,
-	}
-	dbconnector.DB.Create(&strains)
+	if userIsLoggedIn {
+		// Validate input
+		var input strainsInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	c.JSON(http.StatusOK, gin.H{"data": strains})
+		// Create strains
+		strains := models.Strain{
+			Name: input.Name,
+		}
+		dbconnector.DB.Create(&strains)
+
+		c.JSON(http.StatusOK, gin.H{"data": strains})
+	}
 }
 
 // PATCH /strains/:id
 // Update a strains
 func UpdateStrains(c *gin.Context) {
-	var strains models.Strain
-	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&strains).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Strain not found!"})
-		return
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
+
+	if userIsLoggedIn {
+		var strains models.Strain
+		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&strains).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Strain not found!"})
+			return
+		}
+
+		// Validate input
+		var input strainsInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		dbconnector.DB.Model(&strains).Updates(input)
+
+		c.JSON(http.StatusOK, gin.H{"data": strains})
 	}
-
-	// Validate input
-	var input strainsInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	dbconnector.DB.Model(&strains).Updates(input)
-
-	c.JSON(http.StatusOK, gin.H{"data": strains})
 }
 
 // DELETE /strains/:id
 // Delete a strains
 func DeleteStrains(c *gin.Context) {
-	var strains models.Strain
-	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&strains).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Strains not found!"})
-		return
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
+
+	if userIsLoggedIn {
+		var strains models.Strain
+		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&strains).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Strains not found!"})
+			return
+		}
+
+		dbconnector.DB.Delete(&strains)
+
+		c.JSON(http.StatusOK, gin.H{"data": true})
 	}
-
-	dbconnector.DB.Delete(&strains)
-
-	c.JSON(http.StatusOK, gin.H{"data": true})
 }

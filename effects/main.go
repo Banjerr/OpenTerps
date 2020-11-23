@@ -5,6 +5,7 @@ import (
 
 	"openterps/dbconnector"
 	"openterps/models"
+	"openterps/simpleauth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,53 +26,65 @@ type effectInput struct {
 // POST /effect
 // Create a effect
 func CreateEffect(c *gin.Context) {
-	// Validate input
-	var input effectInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
 
-	// Create effect
-	effect := models.Effect{
-		Name: input.Name,
-	}
-	dbconnector.DB.Create(&effect)
+	if userIsLoggedIn {
+		// Validate input
+		var input effectInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	c.JSON(http.StatusOK, gin.H{"data": effect})
+		// Create effect
+		effect := models.Effect{
+			Name: input.Name,
+		}
+		dbconnector.DB.Create(&effect)
+
+		c.JSON(http.StatusOK, gin.H{"data": effect})
+	}
 }
 
 // PATCH /effects/:id
 // Update a effect
 func UpdateEffect(c *gin.Context) {
-	var effect models.Effect
-	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
-		return
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
+
+	if userIsLoggedIn {
+		var effect models.Effect
+		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
+			return
+		}
+
+		// Validate input
+		var input effectInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		dbconnector.DB.Model(&effect).Updates(input)
+
+		c.JSON(http.StatusOK, gin.H{"data": effect})
 	}
-
-	// Validate input
-	var input effectInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	dbconnector.DB.Model(&effect).Updates(input)
-
-	c.JSON(http.StatusOK, gin.H{"data": effect})
 }
 
 // DELETE /effects/:id
 // Delete a effects
 func DeleteEffect(c *gin.Context) {
-	var effect models.Effect
-	if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
-		return
+	userIsLoggedIn := simpleauth.ValidateRequest(c)
+
+	if userIsLoggedIn {
+		var effect models.Effect
+		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
+			return
+		}
+
+		dbconnector.DB.Delete(&effect)
+
+		c.JSON(http.StatusOK, gin.H{"data": true})
 	}
-
-	dbconnector.DB.Delete(&effect)
-
-	c.JSON(http.StatusOK, gin.H{"data": true})
 }

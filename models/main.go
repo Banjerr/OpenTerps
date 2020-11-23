@@ -68,3 +68,8 @@ type SmellResponse struct {
 type TasteResponse struct {
 	Name string `json:"name,omitempty"`
 }
+
+type AuthHeader struct {
+	APIUser string `json:"apiuser"`
+	APIKey  string `json:"apikey"`
+}
