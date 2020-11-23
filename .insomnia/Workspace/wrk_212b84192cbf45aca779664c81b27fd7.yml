@@ -1,9 +1,9 @@
 _id: wrk_212b84192cbf45aca779664c81b27fd7
 type: Workspace
 parentId: null
-modified: 1604154423904
+modified: 1604540356482
 created: 1603052058343
-name: OpenTerps 0.0.1
+name: OpenTerps 0.0.2
 description: An Open API that contains information about terpenes, the effects,
   and the cannabis varieties that contain them.
 scope: spec

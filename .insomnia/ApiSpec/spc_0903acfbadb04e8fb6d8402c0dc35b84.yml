@@ -1,7 +1,7 @@
 _id: spc_0903acfbadb04e8fb6d8402c0dc35b84
 type: ApiSpec
 parentId: wrk_212b84192cbf45aca779664c81b27fd7
-modified: 1604539833112
+modified: 1606140988348
 created: 1603052058352
 fileName: OpenTerps 0.0.1
 contents: >-
@@ -26,22 +26,44 @@ contents: >-
       description: One of the most important parts of the cannabis plant.
     - name: effect
       description: The effect of said terpenes.
-    - name: user
-      description: The people who love the plant and contribute to this API.
+    - name: taste
+      description: The taste of said terpenes.
+    - name: smell
+      description: The smell of said terpenes.
   paths:
     /terpene:
+      get:
+        tags:
+          - terpene
+        summary: Returns terpenes and their associated attributes
+        description: Returns all terpenes in the system
+        operationId: getTerpenes
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cannabis'
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cannabis'
       post:
         tags:
           - terpene
         summary: Add a new terpene to the api
         description: Add new terpene to the api
-        operationId: addTerpene
+        operationId: postTerpene
         requestBody:
           $ref: '#/components/requestBodies/Terpene'
         responses:
           '405':
             description: Invalid input
-      put:
+      patch:
         tags:
           - terpene
         summary: Update an existing terpene
@@ -56,94 +78,6 @@ contents: >-
             description: Terpene not found
           '405':
             description: Validation exception
-    /terpene/findByEffect:
-      get:
-        tags:
-          - terpene
-        summary: Finds Terpenes by effect
-        description: Multiple status values can be provided with comma separated strings
-        operationId: findTerpenesByEffect
-        parameters:
-          - name: effect
-            in: query
-            description: Effect values that need to be considered for filter
-            required: true
-            explode: true
-            schema:
-              type: array
-              items:
-                type: string
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Terpene'
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Terpene'
-          '400':
-            description: Invalid effect value
-    '/terpene/{terpeneId}':
-      get:
-        tags:
-          - terpene
-        summary: Find terpene by ID
-        description: Returns a single terpene
-        operationId: getTerpeneById
-        parameters:
-          - name: terpeneId
-            in: path
-            description: ID of terpene to return
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: '#/components/schemas/Terpene'
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Terpene'
-          '400':
-            description: Invalid ID supplied
-          '404':
-            description: Terpene not found
-      post:
-        tags:
-          - terpene
-        summary: Updates a terpene in the api
-        description: Update a single terpene in the API
-        operationId: updateTerpeneByID
-        parameters:
-          - name: terpeneId
-            in: path
-            description: ID of terpene that needs to be updated
-            required: true
-            schema:
-              type: integer
-              format: int64
-        requestBody:
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  effects:
-                    description: Updated effects of the terpene
-                    type: string
-        responses:
-          '405':
-            description: Invalid input
       delete:
         tags:
           - terpene
@@ -169,6 +103,26 @@ contents: >-
           '404':
             description: Terpene not found
     /cannabis:
+      get:
+        tags:
+          - cannabis
+        summary: Returns all cannabis strains in the API
+        description: Returns all cannabis strains and their associated attributes
+        operationId: getCannabis
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/xml:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cannabis'
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cannabis'
       post:
         tags:
           - cannabis
@@ -180,7 +134,7 @@ contents: >-
         responses:
           '405':
             description: Invalid input
-      put:
+      patch:
         tags:
           - cannabis
         summary: Update an existing cannabis strain
@@ -195,96 +149,6 @@ contents: >-
             description: Cannabis strain not found
           '405':
             description: Validation exception
-    /cannabis/findByTerpene:
-      get:
-        tags:
-          - cannabis
-        summary: Finds cannabis strains by terpene
-        description: Multiple status values can be provided with comma separated strings
-        operationId: findCannabisStrainsByTerpene
-        parameters:
-          - name: terpene
-            in: query
-            description: Terpene values that need to be considered for filter
-            required: true
-            explode: true
-            schema:
-              type: array
-              items:
-                type: string
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Cannabis'
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Cannabis'
-          '400':
-            description: Invalid terpene value
-    '/cannabis/{cannabisId}':
-      get:
-        tags:
-          - cannabis
-        summary: Find cannabis strain by ID
-        description: Returns a single cannabis strain
-        operationId: getCannabisStrainById
-        parameters:
-          - in: path
-            name: cannabisId
-            description: ID of cannabis strain to return
-            required: true
-            schema:
-              type: integer
-              format: int64
-        responses:
-          '200':
-            description: successful operation
-            content:
-              application/xml:
-                schema:
-                  $ref: '#/components/schemas/Cannabis'
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Cannabis'
-          '400':
-            description: Invalid ID supplied
-          '404':
-            description: Cannabis strain not found
-      post:
-        tags:
-          - cannabis
-        summary: Updates a cannabis strain in the api
-        description: Update a single cannabis strain in the API
-        operationId: updateCannabisStrainByID
-        parameters:
-          - name: cannabisId
-            in: path
-            description: ID of cannabis strain that needs to be updated
-            required: true
-            schema:
-              type: integer
-              format: int64
-        requestBody:
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  terpenes:
-                    description: Updated terpenes of the cannabis strain
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Terpene'
-        responses:
-          '405':
-            description: Invalid input
       delete:
         tags:
           - cannabis
@@ -336,21 +200,12 @@ contents: >-
             description: Effect not found
           '405':
             description: Validation exception
-    '/effect/{effectId}':
       get:
         tags:
           - effect
-        summary: Find effect by ID
-        description: Returns a single effect
-        operationId: getEffectById
-        parameters:
-          - name: effectId
-            in: path
-            description: ID of effect to return
-            required: true
-            schema:
-              type: integer
-              format: int64
+        summary: Returns effects and their associated attributes
+        description: Returns all effects in the API
+        operationId: getEffect
         responses:
           '200':
             description: successful operation
@@ -365,32 +220,6 @@ contents: >-
             description: Invalid ID supplied
           '404':
             description: Terpene not found
-      post:
-        tags:
-          - effect
-        summary: Updates a effect in the api
-        description: Update a single effect in the API
-        operationId: updateEffectByID
-        parameters:
-          - name: effectId
-            in: path
-            description: ID of effect that needs to be updated
-            required: true
-            schema:
-              type: integer
-              format: int64
-        requestBody:
-          content:
-            application/x-www-form-urlencoded:
-              schema:
-                type: object
-                properties:
-                  effects:
-                    description: Updated effect
-                    type: string
-        responses:
-          '405':
-            description: Invalid input
       delete:
         tags:
           - effect
@@ -415,51 +244,13 @@ contents: >-
             description: Invalid ID supplied
           '404':
             description: Effect not found
-    /user:
-      post:
-        tags:
-          - user
-        summary: Create user
-        description: This can only be done by the logged in user.
-        operationId: createUser
-        requestBody:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-          description: Created user object
-          required: true
-        responses:
-          default:
-            description: successful operation
-    /user/createWithArray:
-      post:
-        tags:
-          - user
-        summary: Creates list of users with given input array
-        description: ''
-        operationId: createUsersWithArrayInput
-        requestBody:
-          $ref: '#/components/requestBodies/UserArray'
-        responses:
-          default:
-            description: successful operation
   externalDocs:
     description: Find out more about OpenTerps
-    url: 'https://wayhigh.we.bs'
+    url: 'https://open-terps.herokuapp.com/'
   servers:
     - url: 'https://virtserver.swaggerhub.com/CountryFriedCoders/OpenTerps/0.0.1'
   components:
     requestBodies:
-      UserArray:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
-        description: List of user object
-        required: true
       Terpene:
         content:
           application/json:
@@ -527,36 +318,7 @@ contents: >-
             schema:
               $ref: '#/components/schemas/Category'
         description: Category object
-      Tag:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Tag'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Tag'
-        description: Tag object
     schemas:
-      User:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          username:
-            type: string
-          firstName:
-            type: string
-          lastName:
-            type: string
-          email:
-            type: string
-          password:
-            type: string
-          apiKey:
-            type: string
-        xml:
-          name: User
       Category:
         type: object
         properties:
@@ -584,16 +346,6 @@ contents: >-
               $ref: '#/components/schemas/Terpene'
         xml:
           name: Cannabis
-      Tag:
-        type: object
-        properties:
-          id:
-            type: integer
-            format: int64
-          name:
-            type: string
-        xml:
-          name: Tag
       Effect:
         type: object
         properties:
@@ -647,13 +399,6 @@ contents: >-
           name:
             type: string
             example: myrcene
-          tags:
-            type: array
-            xml:
-              name: tag
-              wrapped: true
-            items:
-              $ref: '#/components/schemas/Tag'
           tastes:
             type: array
             xml:
