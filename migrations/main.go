@@ -23,7 +23,7 @@ func RunMigration(c *gin.Context) {
 			Migrate: func(tx *gorm.DB) error {
 				db.AutoMigrate(&models.Terpene{})
 				db.AutoMigrate(&models.Category{})
-				db.AutoMigrate(&models.Effect{})
+				db.AutoMigrate(&models.Benefit{})
 				db.AutoMigrate(&models.Strain{})
 				db.AutoMigrate(&models.Smell{})
 				db.AutoMigrate(&models.Taste{})
@@ -41,6 +41,29 @@ func RunMigration(c *gin.Context) {
 				tx.Migrator().DropTable("terpene_strains")
 				tx.Migrator().DropTable("terpene_smells")
 				tx.Migrator().DropTable("terpene_tastes")
+				return nil
+			},
+		},
+		{
+			ID: "effects-to-benefits-rename",
+			Migrate: func(tx *gorm.DB) error {
+				type TerpeneBenefit struct {
+					TerpeneID int `json:"terpene_id"`
+					BenefitID int `json:"benefit_id"`
+				}
+				db.Migrator().RenameTable("effects", "benefits")
+				db.Migrator().RenameTable("terpene_effects", "terpene_benefits")
+				db.Migrator().RenameColumn(&TerpeneBenefit{}, "effect_id", "benefit_id")
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				type TerpeneEffect struct {
+					TerpeneID int `json:"terpene_id"`
+					EffectID  int `json:"effect_id"`
+				}
+				db.Migrator().RenameTable("benefits", "effects")
+				db.Migrator().RenameTable("terpene_benefits", "terpene_effects")
+				db.Migrator().RenameColumn(&TerpeneEffect{}, "benefit_id", "effect_id")
 				return nil
 			},
 		},

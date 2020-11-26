@@ -1,4 +1,4 @@
-package effects
+package benefits
 
 import (
 	"net/http"
@@ -10,13 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GET /effects
-// Get all effects
-func GetEffects(c *gin.Context) {
-	var effects []models.Effect
-	dbconnector.DB.Find(&effects)
+// GET /benefits
+// Get all benefits
+func GetBenefits(c *gin.Context) {
+	var benefits []models.Benefit
+	dbconnector.DB.Find(&benefits)
 
-	c.JSON(http.StatusOK, gin.H{"data": effects})
+	c.JSON(http.StatusOK, gin.H{"data": benefits})
 }
 
 type effectInput struct {
@@ -25,7 +25,7 @@ type effectInput struct {
 
 // POST /effect
 // Create a effect
-func CreateEffect(c *gin.Context) {
+func CreateBenefit(c *gin.Context) {
 	userIsLoggedIn := simpleauth.ValidateRequest(c)
 
 	if userIsLoggedIn {
@@ -37,7 +37,7 @@ func CreateEffect(c *gin.Context) {
 		}
 
 		// Create effect
-		effect := models.Effect{
+		effect := models.Benefit{
 			Name: input.Name,
 		}
 		dbconnector.DB.Create(&effect)
@@ -46,15 +46,15 @@ func CreateEffect(c *gin.Context) {
 	}
 }
 
-// PATCH /effects/:id
+// PATCH /benefits/:id
 // Update a effect
-func UpdateEffect(c *gin.Context) {
+func UpdateBenefit(c *gin.Context) {
 	userIsLoggedIn := simpleauth.ValidateRequest(c)
 
 	if userIsLoggedIn {
-		var effect models.Effect
+		var effect models.Benefit
 		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Benefit not found!"})
 			return
 		}
 
@@ -71,15 +71,15 @@ func UpdateEffect(c *gin.Context) {
 	}
 }
 
-// DELETE /effects/:id
-// Delete a effects
-func DeleteEffect(c *gin.Context) {
+// DELETE /benefits/:id
+// Delete a benefits
+func DeleteBenefit(c *gin.Context) {
 	userIsLoggedIn := simpleauth.ValidateRequest(c)
 
 	if userIsLoggedIn {
-		var effect models.Effect
+		var effect models.Benefit
 		if err := dbconnector.DB.Where("id = ?", c.Param("id")).First(&effect).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Effect not found!"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Benefit not found!"})
 			return
 		}
 

@@ -16,7 +16,7 @@ import (
 // Get all terpenes
 func GetTerpenes(c *gin.Context) {
 	var terpenes []models.Terpene
-	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Categories").Preload("Strains").Preload("Effects").Find(&terpenes)
+	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Categories").Preload("Strains").Preload("Benefits").Find(&terpenes)
 
 	var terpeneResponse []models.TerpeneResponse
 	terpeneJSON, _ := json.Marshal(terpenes)
@@ -31,7 +31,7 @@ type terpeneInput struct {
 	Taste    []models.Taste    `json:"taste"`
 	Smell    []models.Smell    `json:"smell"`
 	Strain   []models.Strain   `json:"strain"`
-	Effect   []models.Effect   `json:"effect"`
+	Benefit  []models.Benefit  `json:"benefit"`
 }
 
 // POST /terpenes
@@ -54,7 +54,7 @@ func CreateTerpene(c *gin.Context) {
 			Tastes:     input.Taste,
 			Smells:     input.Smell,
 			Strains:    input.Strain,
-			Effects:    input.Effect,
+			Benefits:   input.Benefit,
 		}
 		dbconnector.DB.Create(&terpene)
 
@@ -84,7 +84,7 @@ func UpdateTerpene(c *gin.Context) {
 		terpene.Categories = append(terpene.Categories, input.Category...)
 		terpene.Smells = append(terpene.Smells, input.Smell...)
 		terpene.Tastes = append(terpene.Tastes, input.Taste...)
-		terpene.Effects = append(terpene.Effects, input.Effect...)
+		terpene.Benefits = append(terpene.Benefits, input.Benefit...)
 		terpene.Strains = append(terpene.Strains, input.Strain...)
 
 		dbconnector.DB.Session(&gorm.Session{FullSaveAssociations: true}).Save(&terpene)

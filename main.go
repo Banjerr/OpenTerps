@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"openterps/benefits"
 	"openterps/categories"
 	"openterps/dbconnector"
-	"openterps/effects"
 	"openterps/migrations"
 	"openterps/smells"
 	"openterps/strains"
@@ -45,17 +45,17 @@ func main() {
 	// Delete /terpenes
 	r.DELETE("/terpenes/:id", terpenes.DeleteTerpene)
 
-	// GET /effects
-	r.GET("/effects", effects.GetEffects)
+	// GET /benefits
+	r.GET("/benefits", benefits.GetBenefits)
 
-	// POST /effects
-	r.POST("/effects", effects.CreateEffect)
+	// POST /benefits
+	r.POST("/benefits", benefits.CreateBenefit)
 
-	// PUT /effects
-	r.PATCH("/effects/:id", effects.UpdateEffect)
+	// PUT /benefits
+	r.PATCH("/benefits/:id", benefits.UpdateBenefit)
 
-	// Delete /effects
-	r.DELETE("/effects/:id", effects.DeleteEffect)
+	// Delete /benefits
+	r.DELETE("/benefits/:id", benefits.DeleteBenefit)
 
 	// GET /tastes
 	r.GET("/tastes", tastes.GetTastes)
