@@ -1,7 +1,7 @@
 _id: spc_0903acfbadb04e8fb6d8402c0dc35b84
 type: ApiSpec
 parentId: wrk_212b84192cbf45aca779664c81b27fd7
-modified: 1606415319768
+modified: 1606416232885
 created: 1603052058352
 fileName: OpenTerps 0.0.1
 contents: >-
@@ -11,7 +11,7 @@ contents: >-
     description: >-
       An Open API that contains information about terpenes, the benefits, and the
       cannabis varieties that contain them.
-    version: 0.0.2
+    version: 0.0.5
     title: OpenTerps
     termsOfService: 'https://wayhigh.we.bs'
     contact:
@@ -31,13 +31,21 @@ contents: >-
     - name: smell
       description: The smell of said terpenes.
   paths:
-    /terpenes:
+    /terpenes/{terpeneId}:
       get:
         tags:
           - terpene
         summary: Returns terpenes and their associated attributes
         description: Returns all terpenes in the system
         operationId: getTerpenes
+        parameters:
+          - name: terpeneId
+            in: path
+            description: Terpene id to get
+            required: true
+            schema:
+              type: integer
+              format: int64
         responses:
           '200':
             description: successful operation
@@ -58,6 +66,24 @@ contents: >-
         summary: Add a new terpene to the api
         description: Add new terpene to the api
         operationId: postTerpene
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: terpeneId
+            in: path
+            description: Terpene id to post
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Terpene'
         responses:
@@ -69,6 +95,24 @@ contents: >-
         summary: Update an existing terpene
         description: Update terpene in the api
         operationId: updateTerpene
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: terpeneId
+            in: path
+            description: Terpene id to update
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Terpene'
         responses:
@@ -85,7 +129,12 @@ contents: >-
         description: Deletes a terpene from the API
         operationId: deleteTerpene
         parameters:
-          - name: api_key
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
             in: header
             required: true
             schema:
@@ -102,13 +151,21 @@ contents: >-
             description: Invalid ID supplied
           '404':
             description: Terpene not found
-    /strains:
+    /strains/{strainId}:
       get:
         tags:
           - cannabis
         summary: Returns all cannabis strains in the API
         description: Returns all cannabis strains and their associated attributes
         operationId: getCannabis
+        parameters:
+          - name: strainId
+            in: path
+            description: Strain id to get
+            required: true
+            schema:
+              type: integer
+              format: int64
         responses:
           '200':
             description: successful operation
@@ -129,6 +186,24 @@ contents: >-
         summary: Add a new cannabis strains to the api
         description: Add new cannabis strains to the api
         operationId: addCannabisStrain
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: strainId
+            in: path
+            description: Strain id to post
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Cannabis'
         responses:
@@ -140,6 +215,24 @@ contents: >-
         summary: Update an existing cannabis strain
         description: Update cannabis strain in the api
         operationId: updateCannabisStrain
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: strainId
+            in: path
+            description: Strain id to update
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Cannabis'
         responses:
@@ -156,12 +249,17 @@ contents: >-
         description: Deletes a cannabis strain from the API
         operationId: deleteCannabisStrain
         parameters:
-          - name: api_key
+          - name: APIKey
             in: header
             required: true
             schema:
               type: string
-          - name: cannabisId
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: strainId
             in: path
             description: Cannabis strain id to delete
             required: true
@@ -173,13 +271,31 @@ contents: >-
             description: Invalid ID supplied
           '404':
             description: Cannabis strain not found
-    /benefits:
+    /benefits/{benefitId}:
       post:
         tags:
           - benefit
         summary: Add a new benefit to the api
         description: Add new benefit to the api
-        operationId: addBenefit
+        operationId: addBenefitf
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: benefitId
+            in: path
+            description: Benefit id to post
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Benefit'
         responses:
@@ -191,6 +307,24 @@ contents: >-
         summary: Update an existing benefit
         description: Update benefit in the api
         operationId: updateBenefit
+        parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: benefitId
+            in: path
+            description: Benefit id to update
+            required: true
+            schema:
+              type: integer
+              format: int64
         requestBody:
           $ref: '#/components/requestBodies/Benefit'
         responses:
@@ -206,6 +340,14 @@ contents: >-
         summary: Returns benefits and their associated attributes
         description: Returns all benefits in the API
         operationId: getEBenefit
+        parameters:
+          - name: benefitId
+            in: path
+            description: Benefit id to get
+            required: true
+            schema:
+              type: integer
+              format: int64
         responses:
           '200':
             description: successful operation
@@ -227,7 +369,12 @@ contents: >-
         description: Deletes an benefit from the API
         operationId: deleteBenefit
         parameters:
-          - name: api_key
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
             in: header
             required: true
             schema:
@@ -244,12 +391,30 @@ contents: >-
             description: Invalid ID supplied
           '404':
             description: Benefit not found
-    /tastes:
+    /tastes/{tasteId}:
         post:
           tags:
             - taste
           summary: Add a new taste to the api
           description: Add new taste to the api
+          parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: tasteId
+            in: path
+            description: Taste id to post
+            required: true
+            schema:
+              type: integer
+              format: int64
           operationId: addTaste
           requestBody:
             $ref: '#/components/requestBodies/Taste'
@@ -261,6 +426,24 @@ contents: >-
             - taste
           summary: Update an existing taste
           description: Update taste in the api
+          parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: tasteId
+            in: path
+            description: Taste id to put
+            required: true
+            schema:
+              type: integer
+              format: int64
           operationId: updateTaste
           requestBody:
             $ref: '#/components/requestBodies/Taste'
@@ -277,6 +460,14 @@ contents: >-
           summary: Returns tastes and their associated attributes
           description: Returns all tastes in the API
           operationId: getTaste
+          parameters:
+          - name: tasteId
+            in: path
+            description: Taste id to get
+            required: true
+            schema:
+              type: integer
+              format: int64
           responses:
             '200':
               description: successful operation
@@ -298,7 +489,12 @@ contents: >-
           description: Deletes an taste from the API
           operationId: deleteTaste
           parameters:
-            - name: api_key
+            - name: APIKey
+              in: header
+              required: true
+              schema:
+                type: string
+            - name: APIUser
               in: header
               required: true
               schema:
@@ -315,13 +511,21 @@ contents: >-
               description: Invalid ID supplied
             '404':
               description: Taste not found
-    /smells:
+    /smells/{smellId}:
         post:
           tags:
             - smell
           summary: Add a new smell to the api
           description: Add new smell to the api
           operationId: addSmell
+          parameters:
+          - name: smellId
+            in: path
+            description: Smell id to post
+            required: true
+            schema:
+              type: integer
+              format: int64
           requestBody:
             $ref: '#/components/requestBodies/Smell'
           responses:
@@ -333,6 +537,24 @@ contents: >-
           summary: Update an existing smell
           description: Update smell in the api
           operationId: updateSmell
+          parameters:
+          - name: APIKey
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: APIUser
+            in: header
+            required: true
+            schema:
+              type: string
+          - name: smellId
+            in: path
+            description: Smell id to update
+            required: true
+            schema:
+              type: integer
+              format: int64
           requestBody:
             $ref: '#/components/requestBodies/Smell'
           responses:
@@ -348,6 +570,14 @@ contents: >-
           summary: Returns smells and their associated attributes
           description: Returns all smells in the API
           operationId: getSmell
+          parameters:
+          - name: smellId
+            in: path
+            description: Smell id to get
+            required: true
+            schema:
+              type: integer
+              format: int64
           responses:
             '200':
               description: successful operation
@@ -369,12 +599,17 @@ contents: >-
           description: Deletes an smell from the API
           operationId: deleteSmell
           parameters:
-            - name: api_key
+            - name: APIKey
               in: header
               required: true
               schema:
                 type: string
-            - name: smelleId
+            - name: APIUser
+              in: header
+              required: true
+              schema:
+                type: string
+            - name: smellId
               in: path
               description: Smell id to delete
               required: true
