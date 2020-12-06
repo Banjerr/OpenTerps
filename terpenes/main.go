@@ -25,6 +25,26 @@ func GetTerpenes(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": terpeneResponse})
 }
 
+// GET /terpenes/{id}
+// Get a terpene by it's ID
+func GetTerpene(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var terpenes []models.Terpene
+	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Categories").Preload("Strains").Preload("Benefits").Where("id = ?", id).First(&terpenes)
+
+	var terpeneResponse []models.TerpeneResponse
+	terpeneJSON, _ := json.Marshal(terpenes)
+	_ = json.Unmarshal(terpeneJSON, &terpeneResponse)
+
+	c.JSON(http.StatusOK, gin.H{"data": terpeneResponse})
+}
+
 type terpeneInput struct {
 	Name     string            `json:"name" binding:"required"`
 	Category []models.Category `json:"category"`

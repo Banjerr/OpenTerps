@@ -18,6 +18,22 @@ func GetCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": categories})
 }
 
+// GET /categories/:id
+// Get a category by its ID
+func GetCategory(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var categories []models.Category
+	dbconnector.DB.Where("id = ?", id).First(&categories)
+
+	c.JSON(http.StatusOK, gin.H{"data": categories})
+}
+
 type categoriesInput struct {
 	Name string `json:"name" binding:"required"`
 }

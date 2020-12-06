@@ -19,6 +19,22 @@ func GetSmells(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": smells})
 }
 
+// GET /smells/:id
+// Get a smells by it's id
+func GetSmell(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var smells []models.Smell
+	dbconnector.DB.Where("id = ?", id).First(&smells)
+
+	c.JSON(http.StatusOK, gin.H{"data": smells})
+}
+
 type smellsInput struct {
 	Name string `json:"name" binding:"required"`
 }

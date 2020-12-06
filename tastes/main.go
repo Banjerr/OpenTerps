@@ -19,6 +19,22 @@ func GetTastes(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": tastes})
 }
 
+// GET /taste/:id
+// Get a taste by it's ID
+func GetTaste(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var tastes []models.Taste
+	dbconnector.DB.Where("id = ?", id).First(&tastes)
+
+	c.JSON(http.StatusOK, gin.H{"data": tastes})
+}
+
 type tastesInput struct {
 	Name string `json:"name" binding:"required"`
 }

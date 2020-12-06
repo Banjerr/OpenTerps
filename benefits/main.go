@@ -19,6 +19,22 @@ func GetBenefits(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": benefits})
 }
 
+// GET /benefits/:id
+// Get a benefit by it's ID
+func GetBenefit(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var benefits []models.Benefit
+	dbconnector.DB.Where("id = ?", id).First(&benefits)
+
+	c.JSON(http.StatusOK, gin.H{"data": benefits})
+}
+
 type effectInput struct {
 	Name string `json:"name" binding:"required"`
 }

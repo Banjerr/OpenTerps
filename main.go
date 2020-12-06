@@ -36,6 +36,9 @@ func main() {
 	// GET /terpenes
 	r.GET("/terpenes", terpenes.GetTerpenes)
 
+	// GET /terpene/:id:
+	r.GET("/terpenes/:id", terpenes.GetTerpene)
+
 	// POST /terpenes
 	r.POST("/terpenes", terpenes.CreateTerpene)
 
@@ -47,6 +50,9 @@ func main() {
 
 	// GET /benefits
 	r.GET("/benefits", benefits.GetBenefits)
+
+	// GET /benefit/:id
+	r.GET("/benefits/:id", benefits.GetBenefits)
 
 	// POST /benefits
 	r.POST("/benefits", benefits.CreateBenefit)
@@ -60,6 +66,9 @@ func main() {
 	// GET /tastes
 	r.GET("/tastes", tastes.GetTastes)
 
+	// GET /taste/:id
+	r.GET("/tastes/:id", tastes.GetTaste)
+
 	// POST /tastes
 	r.POST("/tastes", tastes.CreateTastes)
 
@@ -71,6 +80,9 @@ func main() {
 
 	// GET /smells
 	r.GET("/smells", smells.GetSmells)
+
+	// GET /smells/:id
+	r.GET("/smells/:id", smells.GetSmell)
 
 	// POST /smells
 	r.POST("/smells", smells.CreateSmells)
@@ -84,6 +96,9 @@ func main() {
 	// GET /strains
 	r.GET("/strains", strains.GetStrains)
 
+	// GET /strains/:id
+	r.GET("/strains/:id", strains.GetStrain)
+
 	// POST /strains
 	r.POST("/strains", strains.CreateStrains)
 
@@ -95,6 +110,9 @@ func main() {
 
 	// GET /categories
 	r.GET("/categories", categories.GetCategories)
+
+	// GET /categories/:id
+	r.GET("/categories/:id", categories.GetCategory)
 
 	// POST /categories
 	r.POST("/categories", categories.CreateCategories)

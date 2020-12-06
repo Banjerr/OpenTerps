@@ -19,6 +19,22 @@ func GetStrains(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": strains})
 }
 
+// GET /strains/:id
+// Get a strain by it's ID
+func GetStrain(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
+		return
+	}
+
+	var strains []models.Strain
+	dbconnector.DB.Where("id = ?", id).First(&strains)
+
+	c.JSON(http.StatusOK, gin.H{"data": strains})
+}
+
 type strainsInput struct {
 	Name string `json:"name" binding:"required"`
 }
