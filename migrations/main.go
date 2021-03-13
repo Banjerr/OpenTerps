@@ -67,6 +67,17 @@ func RunMigration(c *gin.Context) {
 				return nil
 			},
 		},
+		{
+			ID: "updating-strains-model",
+			Migrate: func(tx *gorm.DB) error {
+				db.Migrator().AutoMigrate(&models.Strain{})
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				db.Migrator().AutoMigrate(&models.Strain{})
+				return nil
+			},
+		},
 	})
 
 	if err := m.Migrate(); err != nil {

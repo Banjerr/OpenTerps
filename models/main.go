@@ -16,7 +16,10 @@ type Benefit struct {
 
 type Strain struct {
 	gorm.Model
-	Name string `json:"name,omitempty"`
+	Name     string    `json:"name,omitempty"`
+	Terpenes []Terpene `json:"terpenes,omitempty" gorm:"many2many:strain_terpenes;"`
+	Tastes   []Taste   `json:"tastes,omitempty" gorm:"many2many:strain_tastes;"`
+	Smells   []Smell   `json:"smells,omitempty" gorm:"many2many:strain_smells"`
 }
 
 type Smell struct {

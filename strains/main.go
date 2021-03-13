@@ -14,7 +14,7 @@ import (
 // Get all strains
 func GetStrains(c *gin.Context) {
 	var strains []models.Strain
-	dbconnector.DB.Find(&strains)
+	dbconnector.DB.Preload("Smells").Preload("Tastes").Preload("Terpenes").Find(&strains)
 
 	c.JSON(http.StatusOK, gin.H{"data": strains})
 }
@@ -36,7 +36,10 @@ func GetStrain(c *gin.Context) {
 }
 
 type strainsInput struct {
-	Name string `json:"name" binding:"required"`
+	Name     string                   `json:"name" binding:"required"`
+	Tastes   []models.TasteResponse   `json:"tastes"`
+	Smells   []models.SmellResponse   `json:"smells"`
+	Terpenes []models.TerpeneResponse `json:"terpenes"`
 }
 
 // POST /strains
@@ -81,7 +84,7 @@ func UpdateStrains(c *gin.Context) {
 			return
 		}
 
-		dbconnector.DB.Model(&strains).Updates(input)
+		dbconnector.DB.Debug().Model(&strains).Updates(input)
 
 		c.JSON(http.StatusOK, gin.H{"data": strains})
 	}
